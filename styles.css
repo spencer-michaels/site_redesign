@@ -1,503 +1,408 @@
-/* CSS Custom Properties for consistent theming */
+/* =============================================================================
+   Spencer Michaels — Personal Site · "Printed Journal"
+   Paper ground, warm ink, deep burgundy accent, serif for prose + mono for fact.
+   Dark mode = "night reading" (cream on deep navy, not grey on black).
+   ============================================================================= */
+
 :root {
-    --color-primary: #000000;
-    --color-primary-light: #333333;
-    --color-text: #000000;
-    --color-text-light: #555555;
-    --color-text-lighter: #777777;
-    --color-background: #ffffff;
-    --color-background-alt: #fafafa;
-    --color-border: #e0e0e0;
-    --color-border-light: #f0f0f0;
-    --color-link: #0000FF;
-    --color-link-hover: #000000;
-    --font-family: 'EB Garamond', Georgia, 'Times New Roman', serif;
-            --max-width: 1035px;
-    --border-radius: 8px;
-    --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.08), 0 1px 2px -1px rgb(0 0 0 / 0.08);
-    --shadow-lg: 0 4px 6px -1px rgb(0 0 0 / 0.08), 0 2px 4px -2px rgb(0 0 0 / 0.08);
+    --paper:         #fdfaf2;
+    --paper-deep:    #f5efe0;
+    --ink:           #1a1614;
+    --ink-muted:     #4a4038;
+    --ink-faded:     #8a7f72;
+    --rule:          #d8cfc2;
+    --rule-soft:     #eae2d1;
+    --accent:        #6B1F2E;
+    --accent-ink:    #4a121d;
+
+    --font-serif: 'EB Garamond', Georgia, 'Times New Roman', serif;
+    --font-mono:  'JetBrains Mono', ui-monospace, Menlo, monospace;
+
+    --max-text: 48.5rem;
+    --margin-col: 10rem;
+    --gutter: 2.5rem;
 }
 
-/* Dark mode variables */
 [data-theme="dark"] {
-    --color-primary: #ffffff;
-    --color-primary-light: #cccccc;
-    --color-text: #ffffff;
-    --color-text-light: #aaaaaa;
-    --color-text-lighter: #888888;
-    --color-background: #1a1a1a;
-    --color-background-alt: #2a2a2a;
-    --color-border: #404040;
-    --color-border-light: #333333;
-    --color-link: #4a9eff;
-    --color-link-hover: #ffffff;
+    --paper:      #0f1720;
+    --paper-deep: #182232;
+    --ink:        #f0e6d2;
+    --ink-muted:  #b8ac94;
+    --ink-faded:  #7a6f5c;
+    --rule:       #2a3445;
+    --rule-soft:  #1c2533;
+    --accent:     #d4889a;
+    --accent-ink: #e8a6b5;
 }
 
-/* Reset and base styles */
-* {
-    box-sizing: border-box;
-}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+html, body { margin: 0; padding: 0; }
 
 body {
-    font-family: var(--font-family);
-    line-height: 1.7;
-    background-color: var(--color-background);
-    color: var(--color-text);
-    margin: 0;
-    padding: 0;
+    font-family: var(--font-serif);
     font-weight: 400;
+    font-size: 20px;
+    line-height: 1.65;
+    color: var(--ink);
+    background: var(--paper);
+    font-feature-settings: "liga", "dlig", "kern";
+    font-variant-numeric: oldstyle-nums proportional-nums;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    transition: background-color 0.3s ease, color 0.3s ease;
+    transition: background 0.4s ease, color 0.4s ease;
 }
 
-        /* Container and layout */
-        .container {
-            max-width: var(--max-width);
-            margin: 0 auto;
-            margin-left: 5rem;
-            padding: 2rem;
-            background-color: var(--color-background);
-            min-height: 100vh;
-            transition: background-color 0.3s ease;
-        }
+::selection { background: color-mix(in srgb, var(--accent) 25%, transparent); }
 
-                /* Controls container */
-        .controls-container {
-            position: fixed;
-            bottom: 1rem;
-            left: 2rem;
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            align-items: center;
-            z-index: 1000;
-        }
+a {
+    color: var(--accent);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+    text-decoration-color: color-mix(in srgb, var(--accent) 40%, transparent);
+    transition: color 0.15s ease, text-decoration-color 0.15s ease;
+}
+a:hover { color: var(--accent-ink); text-decoration-color: currentColor; }
 
-        /* Theme toggle */
-        .theme-toggle {
-            background: var(--color-background);
-            border: 1px solid var(--color-border);
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: var(--shadow);
-        }
+em, i, cite { font-style: italic; }
 
-        .theme-toggle:hover {
-            background: var(--color-background-alt);
-            transform: scale(1.05);
-        }
+/* =========================================================================
+   PAGE — asymmetric grid: narrow margin rail | wide text column
+   ========================================================================= */
+.page {
+    max-width: 72rem;
+    margin: 0 auto;
+    padding: 4.5rem 6rem 6rem;
+    display: grid;
+    grid-template-columns: var(--margin-col) minmax(0, 1fr);
+    column-gap: var(--gutter);
+}
 
-        .theme-toggle svg {
-            width: 20px;
-            height: 20px;
-            fill: var(--color-text);
-            transition: fill 0.3s ease;
-        }
+.margin {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-variant-numeric: tabular-nums lining-nums;
+    color: var(--ink-faded);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding-top: 0.35em;
+    text-align: left;
+}
 
-        /* Font size controls */
-        .font-controls {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-            align-items: center;
-            background: var(--color-background);
-            padding: 0.25rem;
-            border-radius: 20px;
-            border: 1px solid var(--color-border);
-            box-shadow: var(--shadow);
-        }
+.body-col { min-width: 0; max-width: var(--max-text); }
 
-        .font-controls button {
-            background: var(--color-background);
-            border: 1px solid var(--color-border);
-            border-radius: 50%;
-            width: 36px;
-            height: 36px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: var(--shadow);
-            font-size: 16px;
-            font-weight: bold;
-            color: var(--color-text);
-            min-width: 36px;
-        }
-
-        .font-controls button:hover {
-            background: var(--color-background-alt);
-            transform: scale(1.05);
-        }
-
-        .font-controls button:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-/* Typography */
-h1, h2, h3, h4 {
-    color: var(--color-text);
+/* =========================================================================
+   MASTHEAD
+   ========================================================================= */
+.masthead {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: var(--margin-col) minmax(0, 1fr);
+    column-gap: var(--gutter);
+    padding-bottom: 2rem;
+    margin-bottom: 3.5rem;
+    border-bottom: 3px double var(--rule);
+}
+.masthead .margin {
+    padding-top: 0.8rem;
+    line-height: 1.6;
+}
+.masthead h1 {
+    font-family: var(--font-serif);
+    font-size: clamp(2.75rem, 6vw, 4.25rem);
+    font-weight: 600;
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    margin: 0 0 0.6rem;
+    color: var(--ink);
+}
+.masthead .epigraph {
+    max-width: var(--max-text);
+    font-style: italic;
+    font-size: 22px;
+    color: var(--ink-muted);
+    line-height: 1.5;
     margin: 0;
+}
+
+/* =========================================================================
+   SECTION — small caps burgundy label with roman numeral in the rail
+   ========================================================================= */
+.section {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: var(--margin-col) minmax(0, 1fr);
+    column-gap: var(--gutter);
+    margin-bottom: 3.5rem;
+}
+.section .margin-heading {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 600;
+    padding-top: 0.35em;
+    text-align: left;
+    line-height: 1.6;
+}
+.section .body-col { grid-column: 2; }
+
+/* =========================================================================
+   ABOUT
+   ========================================================================= */
+.about p { max-width: var(--max-text); margin: 0 0 1em; }
+.about p:first-of-type {
+    font-size: 22px;
+    line-height: 1.55;
+}
+.about p:first-of-type .dropcap {
+    font-family: var(--font-serif);
+    font-weight: 600;
+    font-size: 4.2em;
+    line-height: 0.85;
+    float: left;
+    color: var(--accent);
+    padding: 0.08em 0.08em 0 0;
+    margin-top: 0.05em;
+}
+
+/* =========================================================================
+   EXPERIENCE — register with date column
+   ========================================================================= */
+.experience .body-col {
+    max-width: none;
+}
+
+.exp-row {
+    display: grid;
+    grid-template-columns: 9rem minmax(0, 1fr);
+    column-gap: 2rem;
+    padding: 1.25rem 0;
+    border-bottom: 1px solid color-mix(in srgb, var(--rule-soft) 60%, transparent);
+}
+.exp-row:last-child { border-bottom: none; }
+
+.exp-row .date {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-variant-numeric: tabular-nums lining-nums;
+    color: var(--ink-faded);
+    letter-spacing: 0.02em;
+    padding-top: 0.5rem;
+    text-align: left;
+    text-transform: uppercase;
+}
+.exp-row .details h3 {
+    font-family: var(--font-serif);
+    font-size: 22px;
+    font-weight: 600;
+    margin: 0 0 0.15rem;
+    line-height: 1.3;
+    color: var(--ink);
+}
+.exp-row .details h3 .aside {
+    font-size: 14px;
+    color: var(--ink-faded);
+    font-weight: 400;
+    font-style: italic;
+}
+.exp-row .details .company {
+    font-family: var(--font-serif);
+    font-style: italic;
+    color: var(--ink-muted);
+    margin: 0 0 0.6rem;
+    font-size: 20px;
+}
+.exp-row .details .description {
+    font-size: 20px;
+    color: var(--ink-muted);
+    line-height: 1.6;
+    margin: 0;
+    max-width: var(--max-text);
+}
+
+
+/* =========================================================================
+   PROJECTS — simple register list (no date column)
+   ========================================================================= */
+.project {
+    padding: 1rem 0 1.25rem;
+    max-width: var(--max-text);
+}
+.project + .project { padding-top: 1.25rem; }
+.project h3 {
+    font-family: var(--font-serif);
+    font-size: 22px;
+    font-weight: 600;
+    margin: 0 0 0.25rem;
+    line-height: 1.3;
+}
+.project h3 a { font-weight: 600; }
+.project .description {
+    font-size: 20px;
+    color: var(--ink-muted);
+    line-height: 1.55;
+    margin: 0;
+}
+
+/* =========================================================================
+   PUBLICATIONS
+   ========================================================================= */
+.publication-item {
+    padding: 1rem 0 1.25rem;
+    border-bottom: 1px solid color-mix(in srgb, var(--rule-soft) 60%, transparent);
+    max-width: var(--max-text);
+}
+.publication-item:last-child { border-bottom: none; }
+
+.publication-title {
+    font-family: var(--font-serif);
+    font-size: 22px;
     font-weight: 600;
     line-height: 1.3;
-    transition: color 0.3s ease;
+    margin: 0 0 0.15rem;
+}
+.publication-title a { color: var(--accent); }
+.publication-year {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-variant-numeric: tabular-nums lining-nums;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--ink-faded);
+    margin: 0 0 0.8rem;
+}
+.publication-description {
+    font-size: 20px;
+    color: var(--ink-muted);
+    line-height: 1.55;
+    margin: 0;
 }
 
-        h1 { 
-            font-size: clamp(2.25rem, 5.5vw, 3.25rem);
-            font-weight: 600;
-            margin-bottom: 0rem;
-        }
-
-        h2 { 
-            font-size: clamp(1.75rem, 4.5vw, 2.25rem);
-            margin-top: 2.5rem;
-            margin-bottom: 1rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 1px solid var(--color-border-light);
-            font-weight: 500;
-            transition: border-color 0.3s ease;
-        }
-
-h2:first-of-type {
-    margin-top: 0;
-}
-
-        h3 { 
-            font-size: 1.375rem;
-            margin-top: 0;
-            margin-bottom: 0.5rem;
-        }
-
-        p {
-            margin: 0 0 1.25rem 0;
-            color: var(--color-text);
-            font-size: 1.125rem;
-            transition: color 0.3s ease;
-        }
-
-/* Links */
-a {
-    color: var(--color-link) !important;
-    text-decoration: underline var(--color-link) !important;
-    text-underline-offset: 2px;
-    transition: all 0.2s ease;
-}
-
-a:hover {
-    color: var(--color-link-hover) !important;
-    text-decoration-color: var(--color-link-hover) !important;
-}
-
-/* Header */
-header {
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-    margin-bottom: 2rem;
-    padding-bottom: 1rem;
-    border-bottom: 3px solid var(--color-border);
-    transition: border-color 0.3s ease;
-}
-
-.header-content {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 2rem;
-}
-
-.header-text h1 {
-    margin-bottom: 0.75rem;
-}
-
-        .header-text p {
-            font-size: 1.25rem;
-            color: var(--color-text-light);
-            margin: 0;
-            font-weight: 500;
-            transition: color 0.3s ease;
-        }
-
-/* Navigation */
-nav ul {
-    display: flex;
+/* =========================================================================
+   BOOKSHELF — hanging-indent reference list
+   ========================================================================= */
+.books {
     list-style: none;
     padding: 0;
     margin: 0;
-    gap: 2rem;
-    flex-wrap: wrap;
 }
-
-nav a {
-    font-weight: 500;
-    padding: 0.5rem 0;
-    position: relative;
-    text-decoration: none;
+.books li {
+    padding: 0.35rem 0 0.35rem 1.75rem;
+    text-indent: -1.75rem;
+    font-size: 18px;
+    line-height: 1.5;
+    max-width: var(--max-text);
 }
-
-nav a:hover {
-    text-decoration: underline;
-    text-decoration-color: var(--color-primary);
-}
-
-/* Social Links */
-.social-links {
-    display: flex;
-    gap: 1rem;
-}
-
-        .social-links a {
-            font-size: 1.125rem;
-            color: var(--color-text-light);
-            text-decoration: none;
-            transition: color 0.2s ease;
-        }
-
-.social-links a:hover {
-    color: var(--color-primary);
-    text-decoration: underline;
-}
-
-/* Sections */
-section {
-    margin-bottom: 3rem;
-}
-
-/* Experience section */
-.experience-item {
-    display: grid;
-    grid-template-columns: 140px 1fr;
-    gap: 1rem;
-    margin-bottom: 1.5rem;
-    border-bottom: 1px solid var(--color-border-light);
-    transition: border-color 0.3s ease;
-}
-
-        .experience-item .date {
-            font-size: 1rem;
-            color: var(--color-text-lighter);
-            font-weight: 500;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            transition: color 0.3s ease;
-        }
-
-.experience-item .details h3 {
-    margin-bottom: 0.25rem;
-    color: var(--color-text);
-    transition: color 0.3s ease;
-}
-
-.experience-item .details .company {
-    font-weight: 500;
-    color: var(--color-text);
-    margin-bottom: 0.5rem;
-    transition: color 0.3s ease;
-}
-
-        .experience-item .details .description {
-            font-size: 1.125rem;
-            color: var(--color-text-light);
-            line-height: 1.6;
-            transition: color 0.3s ease;
-        }
-
-/* Publications */
-.publication-item {
-    margin-bottom: 1rem;
-    padding-bottom: 1rem;
-    border-bottom: 1px solid var(--color-border-light);
-    transition: border-color 0.3s ease;
-}
-
-        .publication-title {
-            font-weight: 600;
-            color: var(--color-text);
-            margin-bottom: 0.1rem;
-            font-size: 1.125rem;
-            transition: color 0.3s ease;
-        }
-
-        .publication-year {
-            color: var(--color-text-lighter);
-            font-style: italic;
-            margin-bottom: 0.1rem;
-            font-size: 1rem;
-            transition: color 0.3s ease;
-        }
-
-        .publication-description {
-            color: var(--color-text-light);
-            margin-bottom: 0.5rem;
-            font-size: 1.125rem;
-            transition: color 0.3s ease;
-        }
-
-.publication-links {
-    display: flex;
+.books li .book-meta {
     font-style: italic;
-    gap: 1rem;
-    flex-wrap: wrap;
+    color: var(--ink-faded);
+    font-size: 18px;
+    font-variant-numeric: oldstyle-nums;
+    text-transform: none;
+    letter-spacing: 0;
+}
+.books li .book-year {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-variant-numeric: tabular-nums lining-nums;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--ink-faded);
+    margin-left: 0.6em;
+    vertical-align: 0.1em;
 }
 
-        .publication-links a {
-            font-size: 1rem;
-            font-weight: 500;
-            padding: 0.25rem 0;
-            color: var(--color-primary);
-            text-decoration: underline;
-            text-decoration-color: var(--color-text-lighter);
-            text-underline-offset: 2px;
-            transition: all 0.2s ease;
-        }
-
-.publication-links a:hover {
-    text-decoration-color: var(--color-primary);
+/* =========================================================================
+   COLOPHON (footer)
+   ========================================================================= */
+.colophon {
+    grid-column: 1 / -1;
+    margin-top: 5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--rule);
+    display: grid;
+    grid-template-columns: var(--margin-col) minmax(0, 1fr);
+    column-gap: var(--gutter);
+}
+.colophon .label {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--ink-faded);
+    text-align: left;
+    padding-top: 0.15rem;
+}
+.colophon .note {
+    font-size: 16px;
+    color: var(--ink-muted);
+    font-style: italic;
+    max-width: var(--max-text);
+    margin: 0;
 }
 
-/* Bookshelf */
-.bookshelf-list {
-    list-style: none;
+/* =========================================================================
+   THEME TOGGLE — inline text button inside the colophon
+   ========================================================================= */
+.theme-toggle {
+    background: none;
+    border: none;
     padding: 0;
+    margin: 0;
+    font: inherit;
+    font-style: italic;
+    color: var(--accent);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+    text-decoration-color: color-mix(in srgb, var(--accent) 40%, transparent);
+    cursor: pointer;
+    transition: color 0.15s ease, text-decoration-color 0.15s ease;
 }
+.theme-toggle:hover { color: var(--accent-ink); text-decoration-color: currentColor; }
+.theme-toggle:focus-visible { outline: 1px solid var(--accent); outline-offset: 2px; }
 
-.book-item {
-    margin-bottom: 0.5rem;
-}
-
-        .book-title {
-            font-weight: 500;
-            color: var(--color-text);
-            font-size: 1.125rem;
-            transition: color 0.3s ease;
-        }
-
-        .book-meta {
-            font-size: 1rem;
-            color: var(--color-text-lighter);
-            font-style: italic;
-            transition: color 0.3s ease;
-        }
-
-/* Footer */
-        footer {
-            text-align: left;
-            margin-top: 3rem;
-            padding-top: 1.5rem;
-            border-top: 1px solid var(--color-border-light);
-            font-size: 1rem;
-            color: var(--color-text-lighter);
-            transition: border-color 0.3s ease, color 0.3s ease;
-        }
-
-footer a {
-    font-weight: 500;
-}
-
-/* Smooth scrolling */
-html {
-    scroll-behavior: smooth;
-}
-
-/* Responsive design */
-                @media (max-width: 768px) {
-            .container {
-                padding: 1.5rem;
-                margin: 0 auto;
-                margin-left: 2rem;
-                margin-right: 2rem;
-            }
-
-            .controls-container {
-                display: none;
-            }
-
-    .header-content {
-        flex-direction: column;
-        align-items: flex-start;
-        justify-content: flex-start;
-        gap: 1.5rem;
+/* =========================================================================
+   Responsive — collapse margin rail on small screens
+   ========================================================================= */
+@media (max-width: 860px) {
+    .page {
+        padding: 3rem 1.5rem 4rem;
     }
-
-    nav ul {
-        gap: 1.5rem;
-    }
-
-    .experience-item {
+    .page,
+    .masthead,
+    .section,
+    .exp-row,
+    .colophon {
         grid-template-columns: 1fr;
-        gap: 1rem;
+        column-gap: 0;
     }
-
-    .experience-item .date {
-        order: -1;
-        font-size: 0.8rem;
-    }
-
-    .bookshelf-grid {
-        grid-template-columns: 1fr;
-    }
-
-    h2 {
-        margin-top: 2.5rem;
-    }
-
-    section {
-        margin-bottom: 3rem;
-    }
-}
-
-        @media (max-width: 480px) {
-            .container {
-                padding: 1rem;
-                margin: 0 auto;
-                margin-left: 1rem;
-                margin-right: 1rem;
-            }
-
-    nav ul {
-        flex-direction: column;
-        gap: 1rem;
-    }
-
-    .publication-links {
-        flex-direction: column;
-    }
-
-    .publication-links a {
+    .masthead .margin,
+    .section .margin-heading,
+    .colophon .label {
         text-align: left;
+        padding-top: 0;
+        margin-bottom: 0.5rem;
     }
+    .exp-row .date {
+        text-align: left;
+        padding-top: 0;
+        margin-bottom: 0.4rem;
+    }
+    .section .body-col,
+    .colophon .note { grid-column: 1; }
 }
 
-/* Print styles */
+/* =========================================================================
+   Print — proud print stylesheet for a handout-worthy PDF
+   ========================================================================= */
 @media print {
-    body {
-        background: white;
-    }
-    
-    .container {
-        box-shadow: none;
-        max-width: none;
-    }
-    
-    .theme-toggle,
-    .font-controls {
-        display: none;
-    }
-    
-    .experience-item:hover,
-    .book-card:hover {
-        transform: none;
-        box-shadow: none;
-    }
-} 
+    body { background: white; color: black; }
+    .theme-note { display: none; }
+    .page { max-width: none; padding: 1in; }
+    a { color: black; text-decoration-color: #aaa; }
+    .section, .masthead, .colophon { page-break-inside: avoid; }
+}
